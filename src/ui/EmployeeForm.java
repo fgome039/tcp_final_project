@@ -5,23 +5,31 @@
  */
 package ui;
 
+import javax.swing.JDialog;
+import tpc.finalproject.EmployeeManager;
 import tpc.finalproject.Employee;
 
 /**
  *
  * @author damanglez
  */
-public class EmployeeForm extends javax.swing.JFrame {
+public class EmployeeForm extends JDialog {
     private Employee employee;
+	private final EmployeeManager manager;
+	private final boolean isNew;
 
     /**
      * Creates new form account
+	 * @param employee
      */
-    public EmployeeForm(Employee employee) {
+    public EmployeeForm(Employee employee, EmployeeManager manager, boolean isNew) {
         initComponents();
         this.employee = employee;
+		this.manager = manager;
+		this.isNew = isNew;
         
-        jTextField1.setText(employee.getName());
+		idLabel.setText(employee.getId() + "");
+        jTextField1.setText(employee.getFirstName());
         jTextField11.setText(employee.getLastName());
         jTextField12.setText(employee.getEmail());
         jTextField5.setText(employee.getPhoneNumber());
@@ -49,6 +57,23 @@ public class EmployeeForm extends javax.swing.JFrame {
                 return 0;
         }
     }
+	
+	/**
+     * This method returns department index
+     * Administration, Prepress, Production
+     */
+    private String getIndexDepartment(int index) {        
+        switch (index) {
+            case 1:
+				return "Administration";
+            case 2:
+				return "Prepress";
+            case 3:
+				return "Production";
+            default:
+                return null;
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,7 +97,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jTextField11 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        idLabel = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
 
@@ -80,8 +105,9 @@ public class EmployeeForm extends javax.swing.JFrame {
 
         jButton1.setText("jButton1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Employee");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setText("Name");
 
@@ -111,6 +137,11 @@ public class EmployeeForm extends javax.swing.JFrame {
         jLabel11.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
         jButton2.setText("Save");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancel");
         jButton3.setActionCommand("");
@@ -128,8 +159,8 @@ public class EmployeeForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("ID");
+        idLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        idLabel.setText("ID");
 
         jTextField12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,7 +203,7 @@ public class EmployeeForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
+                            .addComponent(idLabel))
                         .addGap(0, 198, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -185,7 +216,7 @@ public class EmployeeForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel7)
+                .addComponent(idLabel)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -226,7 +257,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         jButton3.getAccessibleContext().setAccessibleName("bottomCancel");
         jLabel6.getAccessibleContext().setAccessibleName("lblLastname");
         jTextField11.getAccessibleContext().setAccessibleName("txtLastname");
-        jLabel7.getAccessibleContext().setAccessibleName("lblID");
+        idLabel.getAccessibleContext().setAccessibleName("lblID");
         jTextField12.getAccessibleContext().setAccessibleName("txtEmail");
         jComboBox1.getAccessibleContext().setAccessibleName("comboDepartment");
 
@@ -260,8 +291,24 @@ public class EmployeeForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+		employee.setFirstName(jTextField1.getText());
+		employee.setLastName(jTextField11.getText());
+		employee.setEmail(jTextField12.getText());
+		employee.setPhoneNumber(jTextField5.getText());
+		employee.setDepartment(getIndexDepartment(jComboBox1.getSelectedIndex()));
+		
+		if (isNew)
+			manager.add(employee);
+		
+		manager.save();
+		setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel idLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -272,7 +319,6 @@ public class EmployeeForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;

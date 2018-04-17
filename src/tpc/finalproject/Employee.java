@@ -11,7 +11,7 @@ package tpc.finalproject;
  */
 public class Employee {
     private int id; // Unique number assigned by the system
-    private String name;
+    private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
@@ -29,7 +29,7 @@ public class Employee {
     public Employee(int id, String name, String lastName, String email, 
             String phoneNumber, String department) {
         this.id = id;
-        this.name = name;
+        this.firstName = name;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -51,17 +51,17 @@ public class Employee {
     }
 
     /**
-     * @return the name
+     * @return the firstName
      */
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
     /**
-     * @param name the name to set
+     * @param firstName the firstName to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
     
     /**
@@ -72,7 +72,7 @@ public class Employee {
     }
 
     /**
-     * @param lastName the name to set
+     * @param lastName the firstName to set
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
@@ -122,6 +122,6 @@ public class Employee {
     
     @Override
     public String toString() {
-        return name + " (" + id + "), " + department + ", " + phoneNumber;
+        return firstName + " (" + id + "), " + department + ", " + phoneNumber;
     }
 }

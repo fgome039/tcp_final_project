@@ -5,6 +5,7 @@
  */
 package ui;
 
+import javax.swing.JDialog;
 import tpc.finalproject.Material;
 import tpc.finalproject.SubstrateType;
 import tpc.finalproject.Color;
@@ -13,11 +14,12 @@ import tpc.finalproject.Color;
  *
  * @author damanglez
  */
-public class MaterialForm extends javax.swing.JFrame {
+public class MaterialForm extends JDialog {
     private Material material;
     
     /**
      * Creates new form account
+	 * @param material
      */
     public MaterialForm(Material material) {
         initComponents();

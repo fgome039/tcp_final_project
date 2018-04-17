@@ -5,9 +5,16 @@
  */
 package ui;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 import tpc.finalproject.Account;
+import tpc.finalproject.AccountManager;
 import tpc.finalproject.Color;
 import tpc.finalproject.Employee;
+import tpc.finalproject.EmployeeManager;
 import tpc.finalproject.Material;
 import tpc.finalproject.SubstrateType;
 
@@ -15,14 +22,54 @@ import tpc.finalproject.SubstrateType;
  *
  * @author damanglez
  */
-public class HomeForm extends javax.swing.JFrame {
+public class HomeForm extends JFrame {
+	private AccountManager accountManager;
+	private EmployeeManager employeeManager;
 
     /**
      * Creates new form HomeForm
      */
     public HomeForm() {
         initComponents();
+		accountManager = new AccountManager();
+		employeeManager = new EmployeeManager();
+		
+		// we refresh all atbles
+		refresh();
     }
+	
+	/**
+	 * 
+	 */
+	private void refresh() {
+		// accounts
+		refreshAccounts();
+		refreshEmployees();
+	}
+	
+	/**
+	 * Prints all accounts in table
+	 */
+	private void refreshAccounts() {
+		DefaultTableModel tm = (DefaultTableModel)accountsTable.getModel();
+		tm.getDataVector().removeAllElements();
+		accountManager.list().forEach((acc) -> {
+			tm.addRow(new Object[] { acc.getId(), acc.getName(),
+				acc.getContactName(), acc.getPhoneNumber(), acc.getContactEmail() });
+		});
+	}
+
+	/**
+	 * Prints all accounts in table
+	 */
+	private void refreshEmployees() {
+		DefaultTableModel tm = (DefaultTableModel)employeesTable.getModel();
+		tm.getDataVector().removeAllElements();
+		employeeManager.list().forEach((emp) -> {
+			tm.addRow(new Object[] { emp.getId(), emp.getFirstName(),
+				emp.getLastName(), emp.getPhoneNumber(), emp.getDepartment()});
+		});
+	}	
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,9 +82,9 @@ public class HomeForm extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        accountsTable = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        employeesTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -50,20 +97,20 @@ public class HomeForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        accountsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Name", "Contact Name", "Phone", "E-mail"
+                "ID", "First Name", "Contact Name", "Phone", "Department"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getAccessibleContext().setAccessibleName("tabAccountHome");
+        jScrollPane1.setViewportView(accountsTable);
+        accountsTable.getAccessibleContext().setAccessibleName("tabAccountHome");
 
         jTabbedPane1.addTab("Account", jScrollPane1);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        employeesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -71,8 +118,8 @@ public class HomeForm extends javax.swing.JFrame {
                 "ID", "Name", "Department", "Phone", "E-mail"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
-        jTable2.getAccessibleContext().setAccessibleName("tabEmployeeHome");
+        jScrollPane2.setViewportView(employeesTable);
+        employeesTable.getAccessibleContext().setAccessibleName("tabEmployeeHome");
 
         jTabbedPane1.addTab("Employee", jScrollPane2);
 
@@ -113,6 +160,11 @@ public class HomeForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("Delete");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Edit");
         jButton3.setMaximumSize(new java.awt.Dimension(63, 23));
@@ -167,7 +219,7 @@ public class HomeForm extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton2)
@@ -187,41 +239,113 @@ public class HomeForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int tabSelectIndex = jTabbedPane1.getSelectedIndex();
+        JDialog fr = null;
+		int tabSelectIndex = jTabbedPane1.getSelectedIndex();
         
         switch (tabSelectIndex) {
             case 0:
-                Account newAccount = new Account(0, null, null, null,
-                        null, null, null, null, null, null);
-                AccountForm aF = new AccountForm(newAccount);
-                aF.setVisible(true);
+                Account newAccount = new Account(accountManager.getNextId(), 
+						null, null, null, null, null, null, null, null, null);
+                fr = new AccountForm(newAccount, accountManager, true);
                 break;
             case 1: 
-                Employee newEmployee = new Employee(0, null, null, 
-                        null, null, null);
-                EmployeeForm eF = new EmployeeForm(newEmployee);
-                eF.setVisible(true);
+                Employee newEmployee = new Employee(employeeManager.getNextId(), 
+						null, null, null, null, null);
+                fr = new EmployeeForm(newEmployee, employeeManager, true);
                 break;
             case 2:
                 Material material = new Material(0, null, 
                         SubstrateType.NONE, Color.WHITE, 0, 0, 0);
-                MaterialForm mF = new MaterialForm(material);
-                mF.setVisible(true);
+                fr = new MaterialForm(material);
                 break;
-            case 3:
-                WorkOrderForm woF = new WorkOrderForm();
-                woF.setVisible(true);
+			default:
+                fr = new WorkOrderForm();
                 break;
         }
+		
+		fr.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				refresh();
+			}
+		});
+		fr.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+		JDialog fr = null;
+		int selection;
+		int tabSelectIndex = jTabbedPane1.getSelectedIndex();
+		
+		switch (tabSelectIndex) {
+            case 0:
+                selection = accountsTable.getSelectedRow();
+				if (selection != -1)
+					fr = new AccountForm(accountManager.get(selection),
+						accountManager, false);
+				 
+				break;
+            case 1: 
+				selection = employeesTable.getSelectedRow();
+				if (selection != -1)
+					fr = new EmployeeForm(employeeManager.get(selection),
+						employeeManager, false);
+				
+                break;
+            case 2:
+                Material material = new Material(0, null, 
+                        SubstrateType.NONE, Color.WHITE, 0, 0, 0);
+                fr = new MaterialForm(material);
+                break;
+			default:
+                fr = new WorkOrderForm();
+                break;
+        }
+		
+		if (fr != null) {
+			fr.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent e) {
+					refresh();
+				}
+			});
+			fr.setVisible(true);
+		}
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+		int selection;
+		int tabSelectIndex = jTabbedPane1.getSelectedIndex();
+		
+		switch (tabSelectIndex) {
+            case 0:
+                selection = accountsTable.getSelectedRow();
+				if (selection != -1) {
+					accountManager.remove(selection);
+					accountManager.save();
+					refresh();
+				}
+				break;
+            case 1: 
+				selection = employeesTable.getSelectedRow();
+				if (selection != -1) {
+					employeeManager.remove(selection);
+					employeeManager.save();
+					refresh();
+				}
+                break;
+            case 2:
+                
+                break;
+			default:
+                
+                break;
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,6 +384,8 @@ public class HomeForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable accountsTable;
+    private javax.swing.JTable employeesTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -270,8 +396,6 @@ public class HomeForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     // End of variables declaration//GEN-END:variables

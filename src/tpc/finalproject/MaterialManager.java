@@ -7,5 +7,16 @@ package tpc.finalproject;
 
 
 public class MaterialManager<T> extends Manager<Material> {
+
+	@Override
+	protected void parse() {
+		throw new UnsupportedOperationException("Not supported yet."); 
+	//To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public void save() {
+		
+	}
     
 }

@@ -5,24 +5,33 @@
  */
 package ui;
 
+import javax.swing.JDialog;
 import tpc.finalproject.Account;
+import tpc.finalproject.AccountManager;
 
 /**
  *
  * @author damanglez
  */
-public class AccountForm extends javax.swing.JFrame {
-    private Account account;
+public class AccountForm extends JDialog {
+    private final Account account;
+	private final AccountManager manager;
+	private final boolean isNew;
     
     /**
      * Creates new form account
      * @param account
+	 * @param manager
+	 * @param isNew
      */
-    public AccountForm(Account account) {
+    public AccountForm(Account account, AccountManager manager, boolean isNew) {
         initComponents();
         this.account = account;
+		this.manager = manager;
+		this.isNew = isNew;
         
-        jTextField1.setText(account.getName());
+		idLabel.setText(account.getId() + "");
+        nameField.setText(account.getName());
         jTextField3.setText(account.getContactName());
         jTextField4.setText(account.getContactEmail());
         jTextField5.setText(account.getPhoneNumber());
@@ -46,7 +55,7 @@ public class AccountForm extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        nameField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -62,7 +71,7 @@ public class AccountForm extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
+        idLabel = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -72,14 +81,14 @@ public class AccountForm extends javax.swing.JFrame {
 
         jButton1.setText("jButton1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Account");
 
         jLabel1.setText("Name");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                nameFieldActionPerformed(evt);
             }
         });
 
@@ -164,8 +173,8 @@ public class AccountForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel6.setText("ID");
+        idLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        idLabel.setText("ID");
 
         jLabel7.setText("Suite");
 
@@ -186,7 +195,7 @@ public class AccountForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addGap(0, 226, Short.MAX_VALUE))
+                                .addGap(0, 245, Short.MAX_VALUE))
                             .addComponent(jTextField4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,15 +204,15 @@ public class AccountForm extends javax.swing.JFrame {
                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField3)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
+                    .addComponent(idLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nameField)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel5))
-                                .addGap(0, 225, Short.MAX_VALUE))
+                                .addGap(0, 244, Short.MAX_VALUE))
                             .addComponent(jTextField6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,11 +243,11 @@ public class AccountForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel6)
+                .addComponent(idLabel)
                 .addGap(9, 9, 9)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -279,7 +288,7 @@ public class AccountForm extends javax.swing.JFrame {
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("lblName");
-        jTextField1.getAccessibleContext().setAccessibleName("txtName");
+        nameField.getAccessibleContext().setAccessibleName("txtName");
         jLabel2.getAccessibleContext().setAccessibleName("lblContactName");
         jTextField3.getAccessibleContext().setAccessibleName("txtContactName");
         jLabel3.getAccessibleContext().setAccessibleName("lblEmail");
@@ -295,7 +304,7 @@ public class AccountForm extends javax.swing.JFrame {
         jTextField10.getAccessibleContext().setAccessibleName("txtState");
         jButton2.getAccessibleContext().setAccessibleName("bottomSave");
         jButton3.getAccessibleContext().setAccessibleName("bottomCancel");
-        jLabel6.getAccessibleContext().setAccessibleName("lbl_Id");
+        idLabel.getAccessibleContext().setAccessibleName("lbl_Id");
         jLabel7.getAccessibleContext().setAccessibleName("lblSuite");
         jLabel8.getAccessibleContext().setAccessibleName("lblCity");
         jLabel9.getAccessibleContext().setAccessibleName("lblState");
@@ -321,12 +330,27 @@ public class AccountForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+		account.setName(nameField.getText());
+		account.setContactName(jTextField3.getText());
+		account.setContactEmail(jTextField4.getText());
+		account.setPhoneNumber(jTextField5.getText());
+		account.setStreet(jTextField6.getText());
+		account.setSuite(jTextField7.getText());
+		account.setCity(jTextField8.getText());
+		account.setState(jTextField10.getText());
+		account.setZipcode(jTextField9.getText());
+		
+		if (isNew)
+			manager.add(account);
+		
+		manager.save();
+		setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_nameFieldActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
@@ -353,6 +377,7 @@ public class AccountForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField10ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel idLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -363,11 +388,9 @@ public class AccountForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -377,5 +400,6 @@ public class AccountForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField nameField;
     // End of variables declaration//GEN-END:variables
 }

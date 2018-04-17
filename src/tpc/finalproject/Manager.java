@@ -15,13 +15,21 @@ import java.util.List;
  */
 public abstract class Manager<T> {
     private final List<T> objects;
+	protected int nextId;
     
     public Manager() {
         objects = new ArrayList<>();
+		nextId = 0;
+		parse();
+    }
+	
+	public T get(int index) {
+        return objects.get(index);
     }
     
     public void add(T object) {
         objects.add(object);
+		nextId++;
     }
     
     public T remove(int atIndex) {
@@ -31,4 +39,11 @@ public abstract class Manager<T> {
     public List<T> list() {
         return objects;
     }
+	
+	public int getNextId()  {
+		return nextId;
+	}
+	
+	protected abstract void parse();
+	public abstract void save();
 }

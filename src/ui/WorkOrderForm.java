@@ -5,13 +5,15 @@
  */
 package ui;
 
+import javax.swing.JDialog;
+
 
 
 /**
  *
  * @author damanglez
  */
-public class WorkOrderForm extends javax.swing.JFrame {
+public class WorkOrderForm extends JDialog {
 
     /**
      * Creates new form account
