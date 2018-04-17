@@ -12,19 +12,21 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import tpc.finalproject.Account;
 import tpc.finalproject.AccountManager;
-import tpc.finalproject.Color;
 import tpc.finalproject.Employee;
 import tpc.finalproject.EmployeeManager;
 import tpc.finalproject.Material;
+import tpc.finalproject.MaterialManager;
 import tpc.finalproject.SubstrateType;
+import tpc.finalproject.Color;
 
 /**
  *
  * @author damanglez
  */
 public class HomeForm extends JFrame {
-	private AccountManager accountManager;
-	private EmployeeManager employeeManager;
+	private final AccountManager accountManager;
+	private final EmployeeManager employeeManager;
+	private final MaterialManager materialManager;
 
     /**
      * Creates new form HomeForm
@@ -33,6 +35,7 @@ public class HomeForm extends JFrame {
         initComponents();
 		accountManager = new AccountManager();
 		employeeManager = new EmployeeManager();
+		materialManager = new MaterialManager();
 		
 		// we refresh all atbles
 		refresh();
@@ -45,6 +48,7 @@ public class HomeForm extends JFrame {
 		// accounts
 		refreshAccounts();
 		refreshEmployees();
+		refreshMaterials();
 	}
 	
 	/**
@@ -60,7 +64,7 @@ public class HomeForm extends JFrame {
 	}
 
 	/**
-	 * Prints all accounts in table
+	 * Prints all employees in table
 	 */
 	private void refreshEmployees() {
 		DefaultTableModel tm = (DefaultTableModel)employeesTable.getModel();
@@ -69,7 +73,21 @@ public class HomeForm extends JFrame {
 			tm.addRow(new Object[] { emp.getId(), emp.getFirstName(),
 				emp.getLastName(), emp.getPhoneNumber(), emp.getDepartment()});
 		});
-	}	
+	}
+	
+	/**
+	 * Prints all materials in table
+	 */
+	private void refreshMaterials() {
+		DefaultTableModel tm = (DefaultTableModel)materialsTable.getModel();
+		tm.getDataVector().removeAllElements();
+		materialManager.list().forEach((mat) -> {
+			tm.addRow(new Object[] { mat.getId(), mat.getName(),
+				mat.getSubstrateType(), mat.getColor(), 
+				mat.getWidth() + "W * " + mat.getHeight() + "H * " +
+				mat.getThickness() + "T" });
+		});
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -86,7 +104,7 @@ public class HomeForm extends JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         employeesTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        materialsTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
@@ -123,7 +141,7 @@ public class HomeForm extends JFrame {
 
         jTabbedPane1.addTab("Employee", jScrollPane2);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        materialsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -131,8 +149,8 @@ public class HomeForm extends JFrame {
                 "ID", "Name", "Substrate Type", "Color", "Dimensions"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
-        jTable3.getAccessibleContext().setAccessibleName("tabMaterialHome");
+        jScrollPane3.setViewportView(materialsTable);
+        materialsTable.getAccessibleContext().setAccessibleName("tabMaterialHome");
 
         jTabbedPane1.addTab("Material", jScrollPane3);
 
@@ -254,8 +272,8 @@ public class HomeForm extends JFrame {
                 fr = new EmployeeForm(newEmployee, employeeManager, true);
                 break;
             case 2:
-                Material material = new Material(0, null, 
-                        SubstrateType.NONE, Color.WHITE, 0, 0, 0);
+                Material material = new Material(materialManager.getNextId(),
+						null, SubstrateType.NONE, Color.WHITE, 0, 0, 0);
                 fr = new MaterialForm(material);
                 break;
 			default:
@@ -396,7 +414,7 @@ public class HomeForm extends JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTable materialsTable;
     // End of variables declaration//GEN-END:variables
 }

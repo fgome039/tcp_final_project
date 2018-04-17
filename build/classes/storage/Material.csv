@@ -1,0 +1,3 @@
+id,name,substrateType,color,width,height,thickness
+1,PVC - Small sample,RIGID_SUBSTRATE,WHITE,3,40,6
+2,Vinyl (Glossy),SELF_ADHESIVE,BLACK,20,20,0.5

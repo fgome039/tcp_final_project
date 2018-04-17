@@ -25,6 +25,7 @@ public class MaterialForm extends JDialog {
         initComponents();
         this.material = material;
         
+		jLabel6.setText(material.getId() + "");
         jTextField1.setText(material.getName());
         jComboBox2.setSelectedIndex(
                 getSubstrateIndex(material.getSubstrateType()));
@@ -109,8 +110,8 @@ public class MaterialForm extends JDialog {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<String>();
+        jComboBox3 = new javax.swing.JComboBox<String>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -118,7 +119,7 @@ public class MaterialForm extends JDialog {
 
         jButton1.setText("jButton1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Material");
 
         jLabel1.setText("Name");
@@ -168,14 +169,14 @@ public class MaterialForm extends JDialog {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setText("ID");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Rigid Substrate", "Banner", "Self Adhesive" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Rigid Substrate", "Banner", "Self Adhesive" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
             }
         });
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "White", "Black", "Red", "Blue", "Yellow", "Green", "Orange", "Pink", "Purple" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "White", "Black", "Red", "Blue", "Yellow", "Green", "Orange", "Pink", "Purple" }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox3ActionPerformed(evt);

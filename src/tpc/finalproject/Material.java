@@ -28,8 +28,8 @@ public class Material {
      * @param height
      * @param thickness 
      */
-    public Material(int id, String name, SubstrateType substrateType, Color color, 
-            double width, double height, double thickness) {
+    public Material(int id, String name, SubstrateType substrateType, 
+			Color color, double width, double height, double thickness) {
         this.id = id;
         this.name = name;
         this.substrateType = substrateType;
