@@ -7,6 +7,8 @@ package ui;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +20,10 @@ import tpc.finalproject.Material;
 import tpc.finalproject.MaterialManager;
 import tpc.finalproject.SubstrateType;
 import tpc.finalproject.Color;
+import tpc.finalproject.Machine;
+import tpc.finalproject.WorkMethod;
+import tpc.finalproject.WorkOrder;
+import tpc.finalproject.WorkOrderManager;
 
 /**
  *
@@ -27,6 +33,7 @@ public class HomeForm extends JFrame {
 	private final AccountManager accountManager;
 	private final EmployeeManager employeeManager;
 	private final MaterialManager materialManager;
+	private final WorkOrderManager workOrderManager;
 
     /**
      * Creates new form HomeForm
@@ -36,6 +43,7 @@ public class HomeForm extends JFrame {
 		accountManager = new AccountManager();
 		employeeManager = new EmployeeManager();
 		materialManager = new MaterialManager();
+		workOrderManager = new WorkOrderManager();
 		
 		// we refresh all atbles
 		refresh();
@@ -49,6 +57,7 @@ public class HomeForm extends JFrame {
 		refreshAccounts();
 		refreshEmployees();
 		refreshMaterials();
+		refreshWorkOrders();
 	}
 	
 	/**
@@ -88,6 +97,73 @@ public class HomeForm extends JFrame {
 				mat.getThickness() + "T" });
 		});
 	}
+	
+	/**
+	 * Prints all work orders in table
+	 */
+	private void refreshWorkOrders() {
+		Account acc;
+		Material mat;
+		Employee prod, rev;
+		DefaultTableModel tm = (DefaultTableModel)workOrdersTable.getModel();
+		tm.getDataVector().removeAllElements();
+		
+		String pattern = "MM/dd/yyyy";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		
+		for (WorkOrder wo : workOrderManager.list()) {
+			acc = getAccountById(wo.getAccountId());
+			mat = getMaterialById(wo.getMaterialId());
+			prod = getEmployeeById(wo.getProducedById());
+			rev = getEmployeeById(wo.getRevisedById());
+			
+			tm.addRow(new Object[] { wo.getId(), 
+				acc != null ? acc.getName() : "",
+				simpleDateFormat.format(wo.getDueDate()),
+				wo.getMachine(),
+				wo.getWorkMethod(),
+				mat != null ? mat.getName() : "",
+				prod != null ? prod.getFirstName() + prod.getLastName() : "",
+				rev != null ? rev.getFirstName() + rev.getLastName() : ""
+			});
+		}
+	}
+	
+	/**
+	 * @param id
+	 * @return 
+	 */
+	private Account getAccountById(int id) {
+		for (Account acc : accountManager.list())
+			if (acc.getId() == id)
+				return acc;
+		
+		return null;
+	}
+	
+	/**
+	 * @param id
+	 * @return 
+	 */
+	private Material getMaterialById(int id) {
+		for (Material acc : materialManager.list())
+			if (acc.getId() == id)
+				return acc;
+		
+		return null;
+	}
+	
+	/**
+	 * @param id
+	 * @return 
+	 */
+	private Employee getEmployeeById(int id) {
+		for (Employee acc : employeeManager.list())
+			if (acc.getId() == id)
+				return acc;
+		
+		return null;
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,7 +182,7 @@ public class HomeForm extends JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         materialsTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        workOrdersTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -154,7 +230,7 @@ public class HomeForm extends JFrame {
 
         jTabbedPane1.addTab("Material", jScrollPane3);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        workOrdersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -162,8 +238,8 @@ public class HomeForm extends JFrame {
                 "ID", "Account", "Due Date", "Machine", "Method", "Substrate", "Produce By", "Revised By"
             }
         ));
-        jScrollPane4.setViewportView(jTable4);
-        jTable4.getAccessibleContext().setAccessibleName("tabWOHome");
+        jScrollPane4.setViewportView(workOrdersTable);
+        workOrdersTable.getAccessibleContext().setAccessibleName("tabWOHome");
 
         jTabbedPane1.addTab("Work Order", jScrollPane4);
 
@@ -274,10 +350,14 @@ public class HomeForm extends JFrame {
             case 2:
                 Material material = new Material(materialManager.getNextId(),
 						null, SubstrateType.NONE, Color.WHITE, 0, 0, 0);
-                fr = new MaterialForm(material);
+                fr = new MaterialForm(material, materialManager, true);
                 break;
 			default:
-                fr = new WorkOrderForm();
+                fr = new WorkOrderForm(new WorkOrder(workOrderManager.getNextId(), 
+						1, new Date(), Machine.MANUAL, WorkMethod.LAMINATION, 1, 
+						0, 0, 1, 1, null), 
+					accountManager, employeeManager, materialManager, 
+					workOrderManager, true);
                 break;
         }
 		
@@ -311,12 +391,17 @@ public class HomeForm extends JFrame {
 				
                 break;
             case 2:
-                Material material = new Material(0, null, 
-                        SubstrateType.NONE, Color.WHITE, 0, 0, 0);
-                fr = new MaterialForm(material);
+				selection = materialsTable.getSelectedRow();
+				if (selection != -1)
+					fr = new MaterialForm(materialManager.get(selection),
+						materialManager, false);
                 break;
 			default:
-                fr = new WorkOrderForm();
+				selection = workOrdersTable.getSelectedRow();
+				if (selection != -1)
+					fr = new WorkOrderForm(workOrderManager.get(selection), 
+						accountManager, employeeManager, materialManager, 
+						workOrderManager, false);
                 break;
         }
 		
@@ -357,10 +442,20 @@ public class HomeForm extends JFrame {
 				}
                 break;
             case 2:
-                
+                selection = materialsTable.getSelectedRow();
+				if (selection != -1) {
+					materialManager.remove(selection);
+					materialManager.save();
+					refresh();
+				}
                 break;
 			default:
-                
+                selection = workOrdersTable.getSelectedRow();
+				if (selection != -1) {
+					workOrderManager.remove(selection);
+					workOrderManager.save();
+					refresh();
+				}
                 break;
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -414,7 +509,7 @@ public class HomeForm extends JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable4;
     private javax.swing.JTable materialsTable;
+    private javax.swing.JTable workOrdersTable;
     // End of variables declaration//GEN-END:variables
 }

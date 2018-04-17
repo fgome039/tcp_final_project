@@ -6,25 +6,31 @@
 package ui;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import tpc.finalproject.Material;
 import tpc.finalproject.SubstrateType;
 import tpc.finalproject.Color;
+import tpc.finalproject.MaterialManager;
 
 /**
  *
  * @author damanglez
  */
 public class MaterialForm extends JDialog {
-    private Material material;
+    private final Material material;
+	private final MaterialManager manager;
+	private final boolean isNew;
     
     /**
      * Creates new form account
 	 * @param material
      */
-    public MaterialForm(Material material) {
+    public MaterialForm(Material material, MaterialManager manager, boolean isNew) {
         initComponents();
         this.material = material;
-        
+		this.manager = manager;
+        this.isNew = isNew;
+		
 		jLabel6.setText(material.getId() + "");
         jTextField1.setText(material.getName());
         jComboBox2.setSelectedIndex(
@@ -37,7 +43,6 @@ public class MaterialForm extends JDialog {
     }
     
     /**
-     * 
      * @param substrateType
      * None, Rigid Substrate, Banner, Self Adhesive
      * @return 
@@ -56,9 +61,28 @@ public class MaterialForm extends JDialog {
                 return 0;
         }
     }
+	
+	/**
+     * @param substrateType
+     * None, Rigid Substrate, Banner, Self Adhesive
+     * @return 
+     */
+    private SubstrateType getIndexSubstrate(int index) {
+        switch (index) {
+            case 0:
+                return SubstrateType.NONE;
+            case 1:
+                return SubstrateType.RIGID_SUBSTRATE;
+            case 2:
+                return SubstrateType.BANNER;
+            case 3:
+                return SubstrateType.SELF_ADHESIVE;
+            default:
+                return SubstrateType.NONE;
+        }
+    }
     
     /**
-     * 
      * @param color
      * @return 
      */    
@@ -86,6 +110,35 @@ public class MaterialForm extends JDialog {
                 return -1;
         }
     }
+	
+	/**
+     * @param color
+     * @return 
+     */    
+    private Color getIndexColor(int index) {
+        switch (index) {
+            case 0:
+                return Color.WHITE;
+            case 1:
+                return Color.BLACK;
+            case 2:
+                return Color.RED;
+            case 3:
+                return Color.BLUE;
+            case 4:
+                return Color.YELLOW;
+            case 5:
+                return Color.GREEN;
+            case 6:
+                return Color.ORANGE;
+            case 7:
+                return Color.PINK;
+            case 8:
+                return Color.PURPLE;
+            default:
+                return Color.WHITE;
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,12 +159,11 @@ public class MaterialForm extends JDialog {
         jTextField8 = new javax.swing.JTextField();
         jTextField9 = new javax.swing.JTextField();
         jTextField10 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<String>();
-        jComboBox3 = new javax.swing.JComboBox<String>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox3 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -150,13 +202,12 @@ public class MaterialForm extends JDialog {
 
         jTextField10.setToolTipText("");
 
-        jLabel11.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel11.setText("jLabel11");
-        jLabel11.setAutoscrolls(true);
-        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jLabel11.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
         jButton2.setText("Save");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancel");
         jButton3.setActionCommand("");
@@ -169,14 +220,14 @@ public class MaterialForm extends JDialog {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setText("ID");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Rigid Substrate", "Banner", "Self Adhesive" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "None", "Rigid Substrate", "Banner", "Self Adhesive" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
             }
         });
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "White", "Black", "Red", "Blue", "Yellow", "Green", "Orange", "Pink", "Purple" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "White", "Black", "Red", "Blue", "Yellow", "Green", "Orange", "Pink", "Purple" }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox3ActionPerformed(evt);
@@ -194,7 +245,6 @@ public class MaterialForm extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField1)
                     .addGroup(layout.createSequentialGroup()
@@ -265,9 +315,7 @@ public class MaterialForm extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton2))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("lblName");
@@ -317,6 +365,48 @@ public class MaterialForm extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Double width, height, thickness;
+		
+		try {
+			width = Double.valueOf(jTextField8.getText());
+		} catch(NumberFormatException ex) {
+			JOptionPane.showMessageDialog(rootPane, 
+				"Invalid entry for WIDTH", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		try {
+			height = Double.valueOf(jTextField10.getText());
+		} catch(NumberFormatException ex) {
+			JOptionPane.showMessageDialog(rootPane, 
+				"Invalid entry for HEIGHT", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		try {
+			thickness = Double.valueOf(jTextField9.getText());
+		} catch(NumberFormatException ex) {
+			JOptionPane.showMessageDialog(rootPane, 
+				"Invalid entry for THICKNESS", "ERROR", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		material.setName(jTextField1.getText());
+		material.setSubstrateType(getIndexSubstrate(jComboBox2.getSelectedIndex()));
+		material.setColor(getIndexColor(jComboBox3.getSelectedIndex()));
+		material.setWidth(width);
+		material.setHeight(height);
+		material.setThickness(thickness);
+		
+		if (isNew)
+			manager.add(material);
+		
+		manager.save();
+		setVisible(false);
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -325,7 +415,6 @@ public class MaterialForm extends JDialog {
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;

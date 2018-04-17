@@ -10,5 +10,5 @@ package tpc.finalproject;
  * @author damanglez
  */
 public enum Machine {
-    SS160, DV400, CJV_WHITE, FB500, VINYL_CUTTER, LAMINATOR, ICUT, LASER_CUT
+    MANUAL, SS160, DV400, CJV_WHITE, FB500, VINYL_CUTTER
 }

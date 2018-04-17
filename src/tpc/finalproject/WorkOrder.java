@@ -12,41 +12,60 @@ import java.util.Date;
  * @author damanglez
  */
 public class WorkOrder {
+
+	/**
+	 * @return the notes
+	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * @param notes the notes to set
+	 */
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
     private int id; // Unique number assigned by the system
-    private Account account;
+    private int accountId;
     private Date dueDate;
     private Machine machine;
     private WorkMethod workMethod;
-    private Material substrate;
+    private int materialId;
     private double width;
     private double height;
-    private Employee producedBy; 
-    private Employee revisedBy;
+    private int producedById; 
+    private int revisedById;
+	private String notes;
 
     /**
      * 
      * @param id
-     * @param account
+	 * @param accountId
      * @param dueDate
      * @param machine
      * @param workMethod
-     * @param substrate
+     * @param materialId
      * @param width
+	 * @param producedById
+	 * @param revisedById
      * @param height
-     * @param producedBy
-     * @param revisedBy 
+	 * @param notes
      */
-    public WorkOrder(int id, Account account, Date dueDate, Machine machine, WorkMethod workMethod, Material substrate, double width, double height, Employee producedBy, Employee revisedBy) {
+    public WorkOrder(int id, int accountId, Date dueDate, Machine machine, 
+			WorkMethod workMethod, int materialId, double width, double height, 
+			int producedById, int revisedById, String notes) {
         this.id = id;
-        this.account = account;
+        this.accountId = accountId;
         this.dueDate = dueDate;
         this.machine = machine;
         this.workMethod = workMethod;
-        this.substrate = substrate;
+        this.materialId = materialId;
         this.width = width;
         this.height = height;
-        this.producedBy = producedBy;
-        this.revisedBy = revisedBy;
+        this.producedById = producedById;
+        this.revisedById = revisedById;
+		this.notes = notes;
     }
 
     /**
@@ -66,15 +85,15 @@ public class WorkOrder {
     /**
      * @return the account
      */
-    public Account getAccount() {
-        return account;
+    public int getAccountId() {
+        return accountId;
     }
 
     /**
-     * @param account the account to set
+	 * @param accountId
      */
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     /**
@@ -122,15 +141,15 @@ public class WorkOrder {
     /**
      * @return the substrate
      */
-    public Material getSubstrate() {
-        return substrate;
+    public int getMaterialId() {
+        return materialId;
     }
 
     /**
-     * @param substrate the substrate to set
+     * @param materialId the substrate to set
      */
-    public void setSubstrate(Material substrate) {
-        this.substrate = substrate;
+    public void setMaterialId(int materialId) {
+        this.materialId = materialId;
     }
 
     /**
@@ -164,35 +183,36 @@ public class WorkOrder {
     /**
      * @return the producedBy
      */
-    public Employee getProducedBy() {
-        return producedBy;
+    public int getProducedById() {
+        return producedById;
     }
 
     /**
-     * @param producedBy the producedBy to set
+     * @param producedById the producedBy to set
      */
-    public void setProducedBy(Employee producedBy) {
-        this.producedBy = producedBy;
+    public void setProducedById(int producedById) {
+        this.producedById = producedById;
     }
 
     /**
      * @return the revisedBy
      */
-    public Employee getRevisedBy() {
-        return revisedBy;
+    public int getRevisedById() {
+        return revisedById;
     }
 
     /**
-     * @param revisedBy the revisedBy to set
+     * @param revisedById the revisedBy to set
      */
-    public void setRevisedBy(Employee revisedBy) {
-        this.revisedBy = revisedBy;
+    public void setRevisedById(int revisedById) {
+        this.revisedById = revisedById;
     }
     
     @Override
     public String toString() {
-        return id + ", " + account + ", " + dueDate + ", " + substrate + ", " +
-                ". Produced by: " + producedBy + ". Revised by: " + revisedBy;
+        return id + ", Account Id:" + accountId + ", " + 
+				dueDate + ", Material Id: " + materialId + ", " +
+                ". Produced by Id: " + producedById + ". Revised by Id: " + revisedById;
     }
 
 }

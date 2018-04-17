@@ -3,7 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/damanglez/Desktop/MDC/TPC%20Final%20Project/src/ui/Account.java</file>
+            <file>file:/C:/Users/elfer/Repos/tcp_final_project/src/tpc/finalproject/EmployeeManager.java</file>
+            <file>file:/C:/Users/elfer/Repos/tcp_final_project/src/storage/Employee.csv</file>
+            <file>file:/C:/Users/elfer/Repos/tcp_final_project/src/ui/EmployeeForm.java</file>
+            <file>file:/C:/Users/elfer/Repos/tcp_final_project/src/ui/HomeForm.java</file>
+            <file>file:/C:/Users/elfer/Repos/tcp_final_project/src/ui/AccountForm.java</file>
         </group>
     </open-files>
 </project-private>

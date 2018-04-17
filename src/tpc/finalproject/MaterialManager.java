@@ -48,7 +48,7 @@ public class MaterialManager extends Manager<Material> {
 		BufferedWriter writer;
 		CSVPrinter csvPrinter;
 		try {
-            writer = new BufferedWriter(new FileWriter("src/storage/Employee.csv"));
+            writer = new BufferedWriter(new FileWriter("src/storage/Material.csv"));
             csvPrinter = new CSVPrinter(writer, CSVFormat.RFC4180
                    .withHeader("id", "name", "substrateType", "color",
 						"width", "height", "thickness"));
@@ -58,6 +58,7 @@ public class MaterialManager extends Manager<Material> {
 					material.getId(),
 					material.getName(),
 					material.getSubstrateType(),
+					material.getColor(),
 					material.getWidth(),
 					material.getHeight(),
 					material.getThickness());
